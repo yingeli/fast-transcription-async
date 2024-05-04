@@ -14,7 +14,7 @@ def transcript_async(payload = Body(...), ocp_apim_subscription_key: Annotated[s
     config = payload["config"]
     audio_uri = payload["audio"]["uri"]
     task = run_transcript.delay(audio_uri, config, ocp_apim_subscription_key)
-    return JSONResponse({"name": task.id})
+    return {"name": task.id}
 
 @app.get("/speechtotext/v3.2_internal.1/asynctranscriptions/{task_id}")
 def get_transcription_status(task_id):
