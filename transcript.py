@@ -2,7 +2,7 @@ import os
 import requests
 import json
 
-transcription_endpoint = os.environ.get("TRANSCRIPTION_SERVICE_ENDPOINT", "https://southeastasia.api.cognitive.microsoft.com/speechtotext/v3.2_internal.1/syncTranscriptions")
+transcription_endpoint = os.environ.get("TRANSCRIPTION_ENDPOINT", "https://southeastasia.api.cognitive.microsoft.com/speechtotext/v3.2_internal.1/syncTranscriptions")
 
 def transcript(audio_uri, config, speech_service_key):
     with requests.get(audio_uri, stream=True) as resp:  
