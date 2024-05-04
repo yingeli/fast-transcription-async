@@ -1,10 +1,6 @@
 import os
-import io
 import requests
-import httpx
 import json
-import time
-from starlette.responses import StreamingResponse
 
 transcription_endpoint = os.environ.get("TRANSCRIPTION_SERVICE_ENDPOINT", "https://southeastasia.api.cognitive.microsoft.com/speechtotext/v3.2_internal.1/syncTranscriptions")
 
