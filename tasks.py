@@ -10,5 +10,6 @@ transcriptions = Celery(__name__, broker=broker, backend=backend)
 @transcriptions.task(name="transcript")
 def run_transcript(audio_uri, definition, key):
     response = transcript(audio_uri, definition, key)
+    response.raise_for_status()
     result = response.json()
     return result
