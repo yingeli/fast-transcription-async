@@ -22,7 +22,6 @@ def get_transcription_status(task_id):
     response = {
         "name": task_id,
         "status": task_result.status,
-        "state": task_result.state,
         "result": task_result.result
     }
     return response
