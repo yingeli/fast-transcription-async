@@ -24,4 +24,4 @@ def get_transcription_status(task_id):
         "status": task_result.status,
         "result": task_result.result
     }
-    return JSONResponse(response)
+    return response

@@ -15,6 +15,6 @@ def transcript(audio_uri, config, speech_service_key):
             'audio': ("audio", stream, 'application/octet-stream')
         }
         headers = {'Ocp-Apim-Subscription-Key': speech_service_key}
-        response = requests.post(transcription_endpoint, files=files, headers=headers, stream=True)
-
-        return response
+        with requests.post(transcription_endpoint, files=files, headers=headers, stream=True) as response:
+            response.raise_for_status()
+            return response
