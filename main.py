@@ -7,7 +7,7 @@ from tasks import run_transcript, transcriptions
 
 app = FastAPI()
 
-@app.post("/speechtotext/v3.2_internal.1/asynctranscriptions")
+@app.post("/speechtotext/v3.2_internal.1/asynctranscriptions", status_code=201)
 def transcript_async(payload = Body(...), ocp_apim_subscription_key: Annotated[str | None, Header()] = None):
     print("ocp_apim_subscription_key: {}".format(ocp_apim_subscription_key))
     print("payload: {}".format(payload))

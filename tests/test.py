@@ -24,6 +24,7 @@ start_time = time.time()
 response = requests.post(api_uri, json=data, headers=headers)
 
 print("Response: {}".format(response))
+print("Response status_code: {}".format(response.status_code))
 
 # pull result from task_id
 task_id = response.json()["name"]
