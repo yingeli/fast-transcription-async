@@ -9,7 +9,7 @@ broker = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379")
 backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379")
 transcriptions = Celery(__name__, broker=broker, backend=backend)
 
-class SimpleHTTPError(Exception):  
+class JsonHTTPError(Exception):  
     def __init__(self, error):  
         super().__init__(error)  
         self.http_error = error
@@ -28,4 +28,4 @@ def run_transcript(audio_uri, definition, key):
             'status_code': e.response.status_code,  
             'message': e.args[0]  
         }
-        raise SimpleHTTPError(json.dumps(error))
+        raise JsonHTTPError(json.dumps(error))
