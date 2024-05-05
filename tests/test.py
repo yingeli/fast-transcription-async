@@ -16,8 +16,8 @@ data = {
     }
 }
 headers = {'Ocp-Apim-Subscription-Key': key}
-api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions"
-#api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions"
+#api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions"
+api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions"
 
 start_time = time.time()
 
@@ -31,8 +31,8 @@ print("Response json: {}".format(response.json()))
 task_id = response.json()["name"]
 print("task_id: {}".format(task_id))
 
-api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
-#api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
+#api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
+api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
 while True:
     response = requests.get(api_uri)
     print("Response: {}".format(response))
