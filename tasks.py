@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import asyncio
 
 from celery import Celery
 from transcript import transcript
@@ -32,14 +33,13 @@ def run_transcript(audio_uri, definition, key):
         raise JsonHTTPError(json.dumps(error))
     
 @transcriptions.task(name="transcript_async")
-async def run_transcript_async(audio_uri, definition, key):
+def run_transcript_async(audio_uri, definition, key):
     try:
-        response = await transcript_async(audio_uri, definition, key)
-        response.raise_for_status()
-        return response.json()
+        result = asyncio.run(transcript_async(audio_uri, definition, key))  
+        return result
     except requests.exceptions.HTTPError as e:
         error = {
-            'status_code': e.response.status_code,  
-            'message': e.args[0]  
+            'status_code': e.response.status_code,
+            'message': e.args[0]
         }
         raise JsonHTTPError(json.dumps(error))
