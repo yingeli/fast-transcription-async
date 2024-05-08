@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Body, FastAPI, Header
 from fastapi.responses import JSONResponse
 
-from tasks import run_transcript, transcriptions
+from tasks import run_transcript_async, transcriptions
 
 app = FastAPI()
 
@@ -13,7 +13,7 @@ def transcript_async(payload = Body(...), ocp_apim_subscription_key: Annotated[s
     print("payload: {}".format(payload))
     config = payload["config"]
     audio_uri = payload["audio"]["uri"]
-    task = run_transcript.delay(audio_uri, config, ocp_apim_subscription_key)
+    task = run_transcript_async.delay(audio_uri, config, ocp_apim_subscription_key)
     return {"name": task.id}
 
 @app.get("/speechtotext/v3.2_internal.1/asynctranscriptions/{task_id}")

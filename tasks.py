@@ -4,6 +4,7 @@ import json
 
 from celery import Celery
 from transcript import transcript
+from transcript_async import transcript_async
 
 broker = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379")
 backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379")
@@ -25,6 +26,19 @@ def run_transcript(audio_uri, definition, key):
         return response.json()
     except requests.exceptions.HTTPError as e:
         error = {  
+            'status_code': e.response.status_code,  
+            'message': e.args[0]  
+        }
+        raise JsonHTTPError(json.dumps(error))
+    
+@transcriptions.task(name="transcript_async")
+async def run_transcript_async(audio_uri, definition, key):
+    try:
+        response = await transcript_async(audio_uri, definition, key)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as e:
+        error = {
             'status_code': e.response.status_code,  
             'message': e.args[0]  
         }
