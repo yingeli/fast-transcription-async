@@ -1,10 +1,8 @@
 import os
-import requests
-import json
 import asyncio
 
 from celery import Celery
-from transcript import transcript, transcript_async, HTTPError
+from transcript import transcript, transcript_async
 
 broker = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379")
 backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379")

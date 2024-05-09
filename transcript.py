@@ -2,8 +2,15 @@ import os
 import requests
 import json
 import aiohttp
+from azure.identity import DefaultAzureCredential
 
 transcription_endpoint = os.environ.get("TRANSCRIPTION_ENDPOINT", "https://southeastasia.api.cognitive.microsoft.com/speechtotext/v3.2_internal.1/syncTranscriptions")
+
+def get_access_token():
+    token_credential = DefaultAzureCredential()  
+    token_response = token_credential.get_token("https://storage.azure.com/")  
+    access_token = token_response.token
+    return access_token
 
 class HTTPError(Exception):  
     def __init__(self, status_code, reason, request_url):
@@ -19,10 +26,12 @@ class HTTPError(Exception):
             "request_url": self.request_url
         }
         return f"HTTP error: { json.dumps(error) }"
-    
+
 def transcript(audio_uri, config, speech_service_key):
     try:
-        with requests.get(audio_uri, stream=True) as resp:  
+        access_token = get_access_token()
+        headers = {"Authorization": "Bearer " + access_token}
+        with requests.get(audio_uri, headers=headers, stream=True) as resp:  
             # ensure the request was successful  
             resp.raise_for_status()
 
@@ -41,7 +50,9 @@ def transcript(audio_uri, config, speech_service_key):
 async def transcript_async(audio_uri, config, speech_service_key):
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(audio_uri) as get_response:  
+            access_token = get_access_token()
+            headers = {"Authorization": "Bearer " + access_token}
+            async with session.get(audio_uri, headers=headers) as get_response:  
                 get_response.raise_for_status()
                 stream = get_response.content
 

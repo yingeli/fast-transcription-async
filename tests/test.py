@@ -2,7 +2,8 @@ import requests
 import time
 
 key = ""
-audio_uri = "https://oppobatchasrblobstorage.blob.core.windows.net/audios/en/english_30min.wav?sp=r&st=2024-04-24T04:09:39Z&se=2024-12-31T12:09:39Z&spr=https&sv=2022-11-02&sr=b&sig=2RW0PzhJ3BGAqSuQvLQ%2Fz5NWrKhXOWwoOTd2TdkQiug%3D"
+#audio_uri = "https://oppobatchasrblobstorage.blob.core.windows.net/audios/en/english_30min.wav?sp=r&st=2024-04-24T04:09:39Z&se=2024-12-31T12:09:39Z&spr=https&sv=2022-11-02&sr=b&sig=2RW0PzhJ3BGAqSuQvLQ%2Fz5NWrKhXOWwoOTd2TdkQiug%3D"
+audio_uri = "https://ftsa.blob.core.windows.net/audio/english_15mins.wav"
 locale = "en-US"
 data = {
     "config": {
@@ -16,8 +17,8 @@ data = {
     }
 }
 headers = {'Ocp-Apim-Subscription-Key': key}
-api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions"
-#api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions"
+#api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions"
+api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions"
 
 start_time = time.time()
 
@@ -31,8 +32,8 @@ print("Response json: {}".format(response.json()))
 task_id = response.json()["name"]
 print("task_id: {}".format(task_id))
 
-api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
-#api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
+#api_uri = "http://localhost:8000/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
+api_uri = "https://ftsea.azurewebsites.net/speechtotext/v3.2_internal.1/asynctranscriptions/{}".format(task_id)
 while True:
     response = requests.get(api_uri)
     print("Response: {}".format(response))
