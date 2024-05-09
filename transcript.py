@@ -86,4 +86,4 @@ async def transcript_blob(audio_uri, config, speech_service_key):
     except aiohttp.ClientResponseError as e:
         raise HTTPError(e.status, e.message, str(e.request_info.url))
     except Exception as ex:
-        raise HTTPError(0, ex.args[0], None)
+        raise HTTPError(0, str(ex), None)
