@@ -8,7 +8,7 @@ transcription_endpoint = os.environ.get("TRANSCRIPTION_ENDPOINT", "https://south
 
 def get_access_token():
     token_credential = DefaultAzureCredential()  
-    token_response = token_credential.get_token("https://southeastasia.api.cognitive.microsoft.com")
+    token_response = token_credential.get_token("https://storage.azure.com/")
     access_token = token_response.token
     return access_token
 
