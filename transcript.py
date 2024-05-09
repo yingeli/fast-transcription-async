@@ -30,7 +30,7 @@ class HTTPError(Exception):
 def transcript(audio_uri, config, speech_service_key):
     try:
         access_token = get_access_token()
-        headers = {"Authorization": f"Bearer {access_token}"}
+        # headers = {"Authorization": f"Bearer {access_token}"}
         with requests.get(audio_uri, headers=headers, stream=True) as resp:  
             # ensure the request was successful  
             resp.raise_for_status()
