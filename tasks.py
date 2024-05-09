@@ -4,42 +4,18 @@ import json
 import asyncio
 
 from celery import Celery
-from transcript import transcript
-from transcript_async import transcript_async
+from transcript import transcript, transcript_async, HTTPError
 
 broker = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379")
 backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379")
 transcriptions = Celery(__name__, broker=broker, backend=backend)
-
-class JsonHTTPError(Exception):  
-    def __init__(self, error):  
-        super().__init__(error)  
-        self.http_error = error
-    
-    def __str__(self):  
-        return f"HTTP error: {self.http_error}"
     
 @transcriptions.task(name="transcript")
 def run_transcript(audio_uri, definition, key):
-    try:
-        response = transcript(audio_uri, definition, key)
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.HTTPError as e:
-        error = {  
-            'status_code': e.response.status_code,  
-            'message': e.args[0]  
-        }
-        raise JsonHTTPError(json.dumps(error))
+    result = transcript(audio_uri, definition, key)
+    return result
     
 @transcriptions.task(name="transcript_async")
 def run_transcript_async(audio_uri, definition, key):
-    try:
-        result = asyncio.run(transcript_async(audio_uri, definition, key))  
-        return result
-    except requests.exceptions.HTTPError as e:
-        error = {
-            'status_code': e.response.status_code,
-            'message': e.args[0]
-        }
-        raise JsonHTTPError(json.dumps(error))
+    result = asyncio.run(transcript_async(audio_uri, definition, key))  
+    return result
