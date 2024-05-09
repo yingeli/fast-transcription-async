@@ -2,8 +2,8 @@ import requests
 import time
 
 key = ""
-#audio_uri = "https://oppobatchasrblobstorage.blob.core.windows.net/audios/en/english_30min.wav?sp=r&st=2024-04-24T04:09:39Z&se=2024-12-31T12:09:39Z&spr=https&sv=2022-11-02&sr=b&sig=2RW0PzhJ3BGAqSuQvLQ%2Fz5NWrKhXOWwoOTd2TdkQiug%3D"
-audio_uri = "https://ftsa.blob.core.windows.net/audio/english_15mins.wav"
+audio_uri = "https://oppobatchasrblobstorage.blob.core.windows.net/audios/en/english_30min.wav?sp=r&st=2024-04-24T04:09:39Z&se=2024-12-31T12:09:39Z&spr=https&sv=2022-11-02&sr=b&sig=2RW0PzhJ3BGAqSuQvLQ%2Fz5NWrKhXOWwoOTd2TdkQiug%3D"
+#audio_uri = "https://ftsa.blob.core.windows.net/audio/english_15mins.wav"
 locale = "en-US"
 data = {
     "config": {
