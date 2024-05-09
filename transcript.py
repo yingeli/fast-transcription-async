@@ -51,8 +51,8 @@ async def transcript_async(audio_uri, config, speech_service_key):
     try:
         async with aiohttp.ClientSession() as session:
             access_token = get_access_token()
-            headers = {"Authorization": f"Bearer {access_token}"}
-            async with session.get(audio_uri, headers=headers) as get_response:  
+            #headers = {"Authorization": f"Bearer {access_token}"}
+            async with session.get(audio_uri) as get_response:  
                 get_response.raise_for_status()
                 stream = get_response.content
 
