@@ -3,7 +3,6 @@ import requests
 import json
 import aiohttp
 from azure.identity import DefaultAzureCredential
-from azure.storage.blob import BlobClient
 
 transcription_endpoint = os.environ.get("TRANSCRIPTION_ENDPOINT", "https://southeastasia.api.cognitive.microsoft.com/speechtotext/v3.2_internal.1/syncTranscriptions")
 
@@ -60,7 +59,7 @@ async def transcript_async(audio_uri, config, speech_service_key):
                 get_response.raise_for_status()
                 stream = get_response.content
 
-                data = aiohttp.FormData()  
+                data = aiohttp.FormData()
                 data.add_field('definition', json.dumps(config), content_type='application/json')
                 data.add_field('audio', stream, filename="audio", content_type='application/octet-stream') 
 

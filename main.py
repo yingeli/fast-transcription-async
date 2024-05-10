@@ -1,7 +1,6 @@
 from typing import Annotated
 #from celery.result import AsyncResult
 from fastapi import Body, FastAPI, Header
-from fastapi.responses import JSONResponse
 
 from tasks import run_transcript_async, transcriptions
 
