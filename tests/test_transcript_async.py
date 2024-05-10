@@ -2,7 +2,7 @@ import time
 import asyncio
 from transcript import transcript_async
 
-key = "275321276dcd4e438c734cdddb5e5985"
+key = ""
 audio_uri = "https://ftsa.blob.core.windows.net/audio/english_15mins.wav"
 locale = "en-US"
 definition = {
