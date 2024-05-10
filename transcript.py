@@ -6,7 +6,7 @@ from azure.identity import DefaultAzureCredential
 
 transcription_endpoint = os.environ.get("TRANSCRIPTION_ENDPOINT", "https://southeastasia.api.cognitive.microsoft.com/speechtotext/v3.2_internal.1/syncTranscriptions")
 
-def get_access_token_headers():
+def authorization_headers():
     token_credential = DefaultAzureCredential()  
     token_response = token_credential.get_token("https://storage.azure.com/")
     access_token = token_response.token
@@ -34,7 +34,7 @@ class HTTPError(Exception):
 
 def transcript(audio_uri, config, speech_service_key):
     try:
-        headers = get_access_token_headers()
+        headers = authorization_headers()
         with requests.get(audio_uri, headers=headers, stream=True) as resp:  
             # ensure the request was successful  
             resp.raise_for_status()
@@ -54,7 +54,7 @@ def transcript(audio_uri, config, speech_service_key):
 async def transcript_async(audio_uri, config, speech_service_key):
     try:
         async with aiohttp.ClientSession() as session:
-            headers = get_access_token_headers()
+            headers = authorization_headers()
             async with session.get(audio_uri, headers=headers) as get_response:  
                 get_response.raise_for_status()
                 stream = get_response.content
