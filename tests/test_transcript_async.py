@@ -17,8 +17,7 @@ async def call_transcript_async():
     return await transcript_async(audio_uri, definition, key)
 
 #response = transcript_async(audio_uri, definition, key)
-loop = asyncio.get_event_loop()  
-result = loop.run_until_complete(call_transcript_async())  
+result = asyncio.run(call_transcript_async())  
 
 end_time = time.time()
 elapsed_time = end_time - start_time
