@@ -7,11 +7,16 @@ from azure.storage.blob import BlobClient
 
 transcription_endpoint = os.environ.get("TRANSCRIPTION_ENDPOINT", "https://southeastasia.api.cognitive.microsoft.com/speechtotext/v3.2_internal.1/syncTranscriptions")
 
-def get_access_token():
+def get_access_token_headers():
     token_credential = DefaultAzureCredential()  
     token_response = token_credential.get_token("https://storage.azure.com/")
     access_token = token_response.token
-    return access_token
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "x-ms-version": "2017-11-09"
+    }
+    return headers
 
 class HTTPError(Exception):  
     def __init__(self, status_code, reason, request_url):
@@ -30,8 +35,7 @@ class HTTPError(Exception):
 
 def transcript(audio_uri, config, speech_service_key):
     try:
-        access_token = get_access_token()
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = get_access_token_headers()
         with requests.get(audio_uri, headers=headers, stream=True) as resp:  
             # ensure the request was successful  
             resp.raise_for_status()
@@ -51,8 +55,7 @@ def transcript(audio_uri, config, speech_service_key):
 async def transcript_async(audio_uri, config, speech_service_key):
     try:
         async with aiohttp.ClientSession() as session:
-            #access_token = get_access_token()
-            #headers = {"Authorization": f"Bearer {access_token}"}
+            headers = get_access_token_headers()
             async with session.get(audio_uri, headers=headers) as get_response:  
                 get_response.raise_for_status()
                 stream = get_response.content
@@ -67,23 +70,3 @@ async def transcript_async(audio_uri, config, speech_service_key):
                     return await post_response.json()
     except aiohttp.ClientResponseError as e:
         raise HTTPError(e.status, e.message, str(e.request_info.url))
-
-async def transcript_blob(audio_uri, config, speech_service_key):
-    try:
-        async with aiohttp.ClientSession() as session:
-            credential = DefaultAzureCredential()
-            blob_client = BlobClient.from_blob_url(audio_uri, credential)
-            stream = blob_client.download_blob()
-                
-            data = aiohttp.FormData()  
-            data.add_field('definition', json.dumps(config), content_type='application/json')
-            data.add_field('audio', stream, filename="audio", content_type='application/octet-stream') 
-
-            headers = {'Ocp-Apim-Subscription-Key': speech_service_key}   
-            async with session.post(transcription_endpoint, data=data, headers=headers) as post_response:
-                post_response.raise_for_status()
-                return await post_response.json()
-    except aiohttp.ClientResponseError as e:
-        raise HTTPError(e.status, e.message, str(e.request_info.url))
-    except Exception as ex:
-        raise HTTPError(0, str(ex), None)
